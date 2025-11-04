@@ -1,0 +1,488 @@
+ <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title> ALISA— Portfolio</title>
+  <meta name="description" content="Alisa Pereira — Computer Engineering student, creative technologist, designer and artist." />
+  <meta name="theme-color" content="#071021" />
+  <style>
+    /* ---------- Root / Theme ---------- */
+    :root{
+      --bg:#071021; --card:#0f1724; --text:#f3f6fb; --muted:#98a6b3; --accent:#60a5fa;
+      --glass: rgba(255,255,255,0.03); --radius:12px; --container:1100px; --gap:1rem;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--text);background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.04), transparent),
+      linear-gradient(180deg,#071021 0%,#081424 100%);-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    .container{max-width:var(--container);margin:0 auto;padding:1rem}
+
+    /* ---------- Header / Nav ---------- */
+    .site-header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(2,6,23,0.6),transparent);backdrop-filter: blur(6px);border-bottom:1px solid rgba(255,255,255,0.02)}
+    .nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;gap:1rem}
+    .brand{font-weight:700;letter-spacing:1px;color:var(--text);text-decoration:none;font-size:1.05rem}
+    nav.nav{display:flex;gap:0.4rem;align-items:center}
+    nav.nav a{padding:0.55rem 0.7rem;border-radius:8px;text-decoration:none;color:var(--muted);transition:all 180ms}
+    nav.nav a:hover{background:var(--glass);color:var(--text)}
+    nav.nav a.active{color:var(--accent);background:rgba(96,165,250,0.06)}
+    .menu-toggle{display:none;background:none;border:0;color:var(--text);font-size:1.2rem}
+
+    /* ---------- Hero / Home ---------- */
+    .hero{padding:2.5rem 0}
+    .hero-grid{display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:center}
+    .hero h1{font-size:2.8rem;margin:0 0 0.4rem 0;letter-spacing:1px}
+    .lead{color:var(--muted);margin:0 0 1rem 0}
+    .cta{display:flex;gap:0.6rem;align-items:center}
+    .btn{display:inline-block;padding:0.55rem 0.9rem;border-radius:10px;background:var(--accent);color:#05243a;text-decoration:none;font-weight:600}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+    .profile-pic{width:320px;height:320px;object-fit:cover;border-radius:16px;box-shadow:0 10px 40px rgba(2,6,23,0.6);display:block}
+
+    /* ---------- Highlights ---------- */
+    .highlights{display:flex;gap:1rem;margin-top:1.6rem;flex-wrap:wrap}
+    .card{background:var(--card);padding:1rem;border-radius:12px;flex:1;min-width:220px}
+
+    /* ---------- Gallery / Masonry ---------- */
+    .section-title{margin:1.6rem 0 0.6rem 0;font-size:1.25rem}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .grid img{width:100%;height:180px;object-fit:cover;border-radius:10px;cursor:pointer;display:block}
+    .masonry{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+
+    /* ---------- About ---------- */
+    .about-grid{display:grid;grid-template-columns:360px 1fr;gap:1.6rem;align-items:start}
+    .profile-large{width:100%;height:auto;border-radius:12px;display:block}
+
+    /* ---------- Projects ---------- */
+    .project-card{background:var(--card);padding:1rem;border-radius:12px}
+    .cert-preview{margin-top:12px;border-radius:8px;padding:0.6rem;background:rgba(255,255,255,0.02);min-height:88px;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap}
+    .cert-preview img{max-height:160px;border-radius:8px;display:block}
+    .cert-preview a{color:var(--accent);text-decoration:underline}
+
+    /* ---------- Contact ---------- */
+    .contact-form{display:flex;flex-direction:column;gap:0.6rem;max-width:720px}
+    input,textarea,select{padding:0.6rem;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);outline:none}
+    input:invalid,textarea:invalid{box-shadow:0 0 0 3px rgba(255,0,0,0.04)}
+    .muted{color:var(--muted);font-size:0.95rem}
+
+    /* ---------- Footer ---------- */
+    .site-footer{padding:2rem 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:2rem;text-align:center}
+
+    /* ---------- Lightbox ---------- */
+    .lightbox{position:fixed;inset:0;background:rgba(1,3,7,0.88);display:none;align-items:center;justify-content:center;flex-direction:column;padding:2rem;z-index:120}
+    .lightbox img{max-width:92%;max-height:78vh;border-radius:8px;box-shadow:0 10px 50px rgba(2,6,23,0.8)}
+    .lb-close{position:absolute;top:18px;right:18px;background:none;border:0;color:var(--text);font-size:1.6rem;cursor:pointer}
+    .lb-caption{color:var(--muted);margin-top:0.6rem}
+
+    /* ---------- Utilities ---------- */
+    .hide{display:none}
+    .tiny{font-size:0.9rem;color:var(--muted)}
+    .center{display:flex;align-items:center;justify-content:center}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:980px){
+      .hero-grid{grid-template-columns:1fr 260px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .nav{gap:0.2rem}
+    }
+    @media (max-width:760px){
+      .hero-grid{grid-template-columns:1fr}
+      .profile-pic{width:220px;height:220px;margin:0 auto}
+      .menu-toggle{display:inline-block}
+      nav.nav{position:fixed;right:10px;top:64px;background:linear-gradient(180deg,rgba(2,6,23,0.96),rgba(2,6,23,0.98));border-radius:10px;padding:10px;display:none;flex-direction:column;min-width:210px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+      nav.nav.open{display:flex}
+      .grid{grid-template-columns:repeat(1,1fr)}
+      .about-grid{grid-template-columns:1fr}
+      .profile-large{max-width:320px;margin:0 auto}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" data-link>MY PORTFOLIO </a>
+
+      <nav class="nav" id="mainNav">
+        <a href="#home" data-link class="active">Home</a>
+        <a href="#about" data-link>About</a>
+        <a href="#gallery" data-link>Gallery</a>
+        <a href="#projects" data-link>Projects</a>
+        <a href="#contact" data-link>Contact</a>
+      </nav>
+
+      <button id="menuToggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Main container with sections -->
+  <main>
+    <!-- HOME -->
+    <section id="home" class="hero container" data-section>
+      <div class="hero-grid">
+        <div>
+          <h1>ALISA PEREIRA.</h1>
+          <p class="lead">I blend creativity with technology to design meaningful, innovative solutions.</p>
+          <p class="cta">
+            <a class="btn" href="#about" data-link>Learn more</a>
+            <a class="btn btn-outline" href="#projects" data-link>See projects</a>
+          </p>
+
+          <div class="highlights" style="margin-top:1.4rem">
+            <div class="card">
+              <h4 style="margin:0 0 6px 0">Student</h4>
+              <p class="tiny">Computer Engineering — Fr. Conceicao Rodrigues College of Engineering, Bandra.</p>
+            </div>
+            <div class="card">
+              <h4 style="margin:0 0 6px 0">Interests</h4>
+              <p class="tiny">AI, design, data, art, drawing, photography.</p>
+            </div>
+            <div class="card">
+              <h4 style="margin:0 0 6px 0">Values</h4>
+              <p class="tiny">Discipline, detail, growth; balance through travel & music.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="center">
+          <!-- Put your profile image at images/profile.jpg (recommended) -->
+          <img src="images/profile.jpg" alt="Profile picture of Alisa Pereira" class="profile-pic" id="profileImg">
+        </div>
+      </div>
+      </section>
+
+
+    <!-- ABOUT -->
+    <section id="about" class="container" data-section style="padding-top:1rem;padding-bottom:1rem">
+      <div class="about-grid">
+        <div class="card" style="padding:0.8rem">
+
+        </div>
+
+        <div>
+          <h2>About Me</h2>
+          <p style="line-height:1.6">
+            I am a Computer Engineering student at Fr. Conceicao Rodrigues College of Engineering, Bandra.
+            I’m passionate about blending creativity with technology to design meaningful, innovative solutions. My interests span AI, design, and data, along with a deep love for art, drawing, and photography. I value discipline, detail, and growth, finding balance through travel, music, and time with loved ones.
+          </p>
+
+          <h3 style="margin-top:1rem">Skills & Tools</h3>
+          <ul class="skills" style="margin-top:0.6rem">
+            <li>HTML, CSS, JavaScript</li>
+            <li>Python, basic ML concepts</li>
+            <li>Figma, Adobe Photoshop</li>
+            <li>Photography & digital art</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+   </section>
+      <div class="container" style="margin-top:1.6rem">
+        <h3 class="section-title">Featured gallery</h3>
+        <div class="grid gallery-preview" style="margin-top:0.6rem">
+          <img src="images/art1.jpg" alt="art1" data-src="images/art1.jpg" class="thumb">
+          <img src="images/art2.jpg" alt="art2" data-src="images/art2.jpg" class="thumb">
+          <img src="images/art3.jpg" alt="art3" data-src="images/art3.jpg" class="thumb">
+         
+          <img src="images/art4.jpg" alt="art5" data-src="images/art4.jpg" class="thumb">
+          
+         
+          <img src="images/art5.jpg" alt="art8" data-src="images/art5.jpg" class="thumb">
+          <img src="images/art6.jpg" alt="art9" data-src="images/art6.jpg" class="thumb">
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- PROJECTS ---------- -->
+<section id="projects" class="container">
+  <h1>Project — Bit N Build</h1>
+  <div class="project-card">
+    <div class="project-info">
+          <img src="images/bnb.jpg" alt="bnb"  width="500" height="200" data-src="images/bnb.jpg" class="thumb">
+           
+      <div class="project-details">
+        <h2>Bit N Build</h2>
+        <p>
+          <strong>Bit N Build</strong> is an innovative project that blends creativity and technology to solve real-world problems. 
+          It showcases design thinking, programming, and teamwork — focusing on building smart digital solutions using modern tools and coding practices.
+        </p>
+        <ul>
+          <li>💡 <b>Goal:</b> Develop a tech-driven platform for smart automation and user interaction.</li>
+          <li>⚙️ <b>Tech Used:</b> HTML, CSS, JavaScript, and IoT components.</li>
+          <li>🏆 <b>Achievement:</b> Recognized for innovation at Fr. CRCE Tech Expo 2025.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-card {
+    background: var(--card);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+    transition: var(--transition);
+  }
+  .project-card:hover {
+    transform: translateY(-3px);
+  }
+  .project-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+  }
+  .project-image {
+    flex: 1 1 400px;
+    border-radius: 12px;
+  }
+  .project-details {
+    flex: 1 1 400px;
+  }
+  .project-details ul {
+    margin: 12px 0;
+    color: var(--muted);
+  }
+  .project-details li {
+    margin-bottom: 6px;
+  }
+  @media(max-width:800px){
+    .project-info {flex-direction: column;}
+  }
+</style>
+
+    <!-- CONTACT -->
+    <section id="contact" class="container" data-section style="padding-top:1rem;padding-bottom:1rem">
+      <h2>Contact Me</h2>
+      <p class="muted">Send a message — I'd love to hear from you.</p>
+
+      <form id="contactForm" class="contact-form" novalidate style="margin-top:0.8rem">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required minlength="2" placeholder="Your name">
+
+        <label for="email">Email or Contact</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required minlength="10" placeholder="Write your message..."></textarea>
+
+        <button type="submit" class="btn">Send Message</button>
+        <p id="formStatus" class="muted" aria-live="polite" style="margin-top:0.6rem"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> ALISA PEREIRA. • Built with ❤️</p>
+    </div>
+  </footer>
+  <footer class="site-footer">
+  <div class="container">
+    <div style="margin-bottom:0.8rem; display:flex; gap:0.8rem; justify-content:center;">
+      <a href="https://www.linkedin.com/in/alisa-pereira-762875386?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" aria-label="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" width="24" height="24" style="filter:invert(1)">
+      </a>
+      <a href="https://github.com/alisapereira08" target="_blank" aria-label="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" width="24" height="24" style="filter:invert(1)">
+      </a>
+      <a href="https://www.instagram.com/pereira.alisa?igsh=MXFlb21xcXpteDB1bQ==" target="_blank" aria-label="Instagram">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" width="24" height="24" style="filter:invert(1)">
+      </a>
+    </div>
+    <p>© <span id="year"></span> ALISA PEREIRA • Built with ❤️</p>
+  </div>
+</footer>
+
+
+  <!-- ---------- Scripts ---------- -->
+  <script>
+    /***** Basic helpers and initial state *****/
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('open');
+    });
+
+    // Smooth scrolling & link handling for in-page nav (single-file "multi-page")
+    const links = document.querySelectorAll('[data-link]');
+    function setActiveLink(hash) {
+      links.forEach(a => {
+        const href = a.getAttribute('href') || '';
+        if (href === hash) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    }
+
+    links.forEach(a => {
+      a.addEventListener('click', (e) => {
+        // close mobile nav if open
+        mainNav.classList.remove('open');
+        const href = a.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({behavior:'smooth',block:'start'});
+          history.replaceState(null, '', href); // update url hash without jumping
+          setActiveLink(href);
+        }
+      });
+    });
+
+    // On load, set active link based on hash
+    const initHash = location.hash || '#home';
+    setTimeout(()=>{ // small delay so initial scroll isn't interrupted
+      const el = document.querySelector(initHash);
+      if (el) el.scrollIntoView({behavior:'instant',block:'start'});
+    }, 10);
+    setActiveLink(initHash);
+
+    // Highlight nav link on scroll (intersection observer)
+    const sections = document.querySelectorAll('[data-section]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = '#' + entry.target.id;
+          setActiveLink(id);
+          history.replaceState(null, '', id);
+        }
+      });
+    }, {threshold: 0.48});
+
+    sections.forEach(sec => observer.observe(sec));
+
+    /***** Lightbox for gallery *****/
+    const masonryItems = document.querySelectorAll('.masonry-item, .gallery-preview img');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbClose = document.getElementById('lbClose');
+
+    masonryItems.forEach(img => {
+      img.addEventListener('click', (e) => {
+        const src = img.getAttribute('src') || img.dataset.src;
+        const cap = img.dataset.caption || img.alt || '';
+        if (!src) return;
+        // show
+        lbImg.src = src;
+        lbImg.alt = cap || 'Artwork';
+        lbCaption.textContent = cap;
+        lightbox.style.display = 'flex';
+        lightbox.setAttribute('aria-hidden','false');
+      });
+    });
+
+    lbClose.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+      lightbox.setAttribute('aria-hidden','true');
+      lbImg.src = '';
+      lbCaption.textContent = '';
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lbClose.click();
+    });
+
+    /***** Contact form validation & sample submit (no backend) *****/
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      formStatus.textContent = '';
+      const name = contactForm.name.value.trim();
+      const email = contactForm.email.value.trim();
+      const message = contactForm.message.value.trim();
+
+      // Basic validation
+      if (name.length < 2) {
+        formStatus.textContent = 'Please enter your name (at least 2 characters).';
+        contactForm.name.focus();
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        formStatus.textContent = 'Please enter a valid email address.';
+        contactForm.email.focus();
+        return;
+      }
+      if (message.length < 10) {
+        formStatus.textContent = 'Message must be at least 10 characters.';
+        contactForm.message.focus();
+        return;
+      }
+
+      // Simulate sending (no backend provided). Replace with fetch() to your endpoint if available.
+      formStatus.textContent = 'Sending...';
+      setTimeout(() => {
+        formStatus.textContent = 'Thanks — your message has been recorded locally (no server). Replace the submission logic with your backend endpoint to actually send messages.';
+        contactForm.reset();
+      }, 700);
+    });
+
+    /***** Certificate upload & preview in Projects section *****/
+    const certInput = document.getElementById('certInput');
+    const certPreview = document.getElementById('certPreview');
+
+    certInput.addEventListener('change', (e) => {
+      certPreview.innerHTML = '';
+      const file = e.target.files[0];
+      if (!file) {
+        certPreview.innerHTML = '<span class="tiny">No certificate uploaded yet.</span>';
+        return;
+      }
+
+      const nameEl = document.createElement('div');
+      nameEl.textContent = file.name;
+      nameEl.className = 'tiny';
+      certPreview.appendChild(nameEl);
+
+      // If image, show preview
+      if (file.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.onload = () => URL.revokeObjectURL(img.src);
+        certPreview.appendChild(img);
+      } else if (file.type === 'application/pdf') {
+        // for pdfs, create an object/embed or a link to open in new tab
+        const link = document.createElement('a');
+        link.textContent = 'Open PDF certificate';
+        link.href = URL.createObjectURL(file);
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.className = '';
+        certPreview.appendChild(link);
+      } else {
+        const info = document.createElement('div');
+        info.textContent = 'Preview not available for this file type.';
+        info.className = 'tiny';
+        certPreview.appendChild(info);
+      }
+    });
+
+    /***** Accessibility niceties: keyboard close for lightbox and Esc handler  *****/
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (lightbox.style.display === 'flex') lbClose.click();
+        mainNav.classList.remove('open');
+      }
+    });
+
+    /***** Helpful fallback images if your images are missing (graceful degrade) *****/
+    const imgFallbacks = document.querySelectorAll('img');
+    imgFallbacks.forEach(im => {
+      im.addEventListener('error', () => {
+        // minimal inline fallback — replace with your preferred placeholder
+        im.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#0f1724"/><text x="50%" y="50%" fill="#98a6b3" font-family="Arial" font-size="20" dominant-baseline="middle" text-anchor="middle">Image missing<br>${im.alt || ''}</text></svg>`
+        );
+      });
+    });
+  </script>
+</body>
+</html>
